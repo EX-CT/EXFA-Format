@@ -1,0 +1,19 @@
+{
+  "name": "@exfa/format",
+  "version": "1.0.0",
+  "description": "EXFA fit library and document format",
+  "type": "module",
+  "license": "LGPL-3.0-or-later",
+  "main": "./ts/dist/index.js",
+  "types": "./ts/dist/index.d.ts",
+  "files": ["ts/dist/**", "README.md", "LICENSE", "LICENSE.GPL-3.0"],
+  "exports": {
+    ".": {
+      "types": "./ts/dist/index.d.ts",
+      "import": "./ts/dist/index.js"
+    }
+  },
+  "scripts": {
+    "prepare": "npm --prefix ts ci && npm --prefix ts run build"
+  }
+}

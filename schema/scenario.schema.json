@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EX-CT/EXFA-Format/schema/scenario.schema.json",
+  "title": "EXFA Scenario v1",
+  "type": "object",
+  "required": ["id", "name", "target", "params"],
+  "properties": {
+    "id": { "$ref": "common.schema.json#/$defs/opaqueId" },
+    "name": { "type": "string" },
+    "builtin": { "type": "boolean" },
+    "target": {
+      "oneOf": [
+        { "type": "object", "required": ["profile_id"], "properties": { "profile_id": { "$ref": "common.schema.json#/$defs/opaqueId" } }, "additionalProperties": true },
+        {
+          "type": "object",
+          "required": ["fit_id"],
+          "properties": {
+            "fit_id": { "$ref": "common.schema.json#/$defs/opaqueId" },
+            "resist_mode": { "enum": ["auto", "shield", "armor", "hull", "weighted_average"] }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["profile"],
+          "properties": {
+            "profile": {
+              "type": "object",
+              "properties": {
+                "em": { "type": "number" },
+                "thermal": { "type": "number" },
+                "kinetic": { "type": "number" },
+                "explosive": { "type": "number" },
+                "signature_radius": { "type": ["number", "null"] },
+                "max_velocity": { "type": ["number", "null"] },
+                "radius": { "type": ["number", "null"] },
+                "hp": { "type": ["number", "null"] }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "distance_m": { "type": ["number", "null"], "minimum": 0 },
+        "time_s": { "type": ["number", "null"], "minimum": 0, "maximum": 2500 },
+        "tgt_speed_mps": { "type": ["number", "null"], "minimum": 0 },
+        "tgt_speed_pct": { "type": ["number", "null"], "minimum": 0 },
+        "tgt_sig_m": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "atk_speed_mps": { "type": ["number", "null"], "minimum": 0 },
+        "atk_speed_pct": { "type": ["number", "null"], "minimum": 0 },
+        "atk_angle_deg": { "type": ["number", "null"], "minimum": 0, "maximum": 360 },
+        "tgt_angle_deg": { "type": ["number", "null"], "minimum": 0, "maximum": 360 }
+      },
+      "additionalProperties": true
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "ignore_resists": { "type": "boolean" },
+        "apply_projected": { "type": "boolean" },
+        "ignore_lock_range": { "type": "boolean" },
+        "ignore_drone_control_range": { "type": "boolean" },
+        "mobile_drone_mode": { "enum": ["auto", "follow_attacker", "follow_target"] }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

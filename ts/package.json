@@ -1,0 +1,26 @@
+{
+  "name": "@exfa/format",
+  "version": "1.0.0",
+  "description": "EXFA fit library and document format",
+  "type": "module",
+  "license": "LGPL-3.0-or-later",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "prepare": "tsc -p .",
+    "build": "tsc -p .",
+    "test": "vitest run",
+    "schema-validate": "node scripts/schema-validate.mjs"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "format": "exfa/library@1",
+  "folders": ["PvP/Frigates", "Scenarios", "Empty"],
+  "fits": {
+    "app-basic": {
+      "format": "exfa/fit@1",
+      "id": "app-basic",
+      "name": "R",
+      "folder": "PvP/Frigates",
+      "fit": {
+        "ship": { "type_id": 587, "mode_type_id": null },
+        "modules": [
+          { "type_id": 2873, "slot": "high", "state": "active", "charge_type_id": 21898, "spool": 0.5 }
+        ],
+        "drones": [],
+        "fighters": [],
+        "implants": [],
+        "boosters": [],
+        "cargo": [],
+        "projected": [],
+        "fleet_buffs": [],
+        "environment": { "effect_type_ids": [], "system_security": null },
+        "options": { "factor_reload": false, "spool": 1, "rah": "adapt" }
+      },
+      "refs": { "character_id": "all5", "damage_pattern_id": "uniform", "target_profile_id": "none", "scenario_ids": [] },
+      "links": { "booster_fit_ids": [], "projected_fits": [] },
+      "alternatives": [],
+      "branches": [],
+      "history": []
+    },
+    "app-nested-a": {
+      "format": "exfa/fit@1",
+      "id": "app-nested-a",
+      "name": "A",
+      "fit": {
+        "ship": { "type_id": 587, "mode_type_id": null },
+        "modules": [],
+        "drones": [],
+        "fighters": [],
+        "implants": [],
+        "boosters": [],
+        "cargo": [],
+        "projected": [],
+        "fleet_buffs": [],
+        "environment": { "effect_type_ids": [], "system_security": null },
+        "options": { "factor_reload": false, "spool": 1, "rah": "adapt" }
+      },
+      "refs": { "character_id": "all5", "damage_pattern_id": "uniform", "target_profile_id": "none", "scenario_ids": [] },
+      "links": {
+        "booster_fit_ids": ["app-nested-b"],
+        "projected_fits": [{ "fit_id": "app-nested-b", "amount": 1, "distance_m": 5000 }]
+      },
+      "alternatives": [],
+      "branches": [],
+      "history": []
+    },
+    "app-nested-b": {
+      "format": "exfa/fit@1",
+      "id": "app-nested-b",
+      "name": "B",
+      "fit": {
+        "ship": { "type_id": 603, "mode_type_id": null },
+        "modules": [],
+        "drones": [],
+        "fighters": [],
+        "implants": [],
+        "boosters": [],
+        "cargo": [],
+        "projected": [],
+        "fleet_buffs": [],
+        "environment": { "effect_type_ids": [], "system_security": null },
+        "options": { "factor_reload": false, "spool": 1, "rah": "adapt" }
+      },
+      "refs": { "character_id": "all5", "damage_pattern_id": "uniform", "target_profile_id": "none", "scenario_ids": [] },
+      "links": {
+        "booster_fit_ids": [],
+        "projected_fits": [{ "fit_id": "app-nested-a", "amount": 1, "distance_m": 5000 }]
+      },
+      "alternatives": [],
+      "branches": [],
+      "history": []
+    },
+    "complex": {
+      "format": "exfa/fit@1",
+      "id": "complex",
+      "name": "Linked alternatives",
+      "folder": "Scenarios",
+      "fit": {
+        "ship": { "type_id": 587, "mode_type_id": null },
+        "modules": [
+          {
+            "type_id": 2873,
+            "slot": "high",
+            "state": "active",
+            "charge_type_id": 21898,
+            "mutation": { "base_type_id": 2873, "mutaplasmid_type_id": 49712, "attributes": { "20": 1.1 } },
+            "spool": 0.75,
+            "group": 7,
+            "alt_id": "weapon-choice"
+          },
+          {
+            "type_id": 2873,
+            "slot": "high",
+            "state": "online",
+            "charge_type_id": 21898,
+            "group": 7,
+            "alt_id": "weapon-choice"
+          }
+        ],
+        "drones": [],
+        "fighters": [],
+        "implants": [],
+        "boosters": [],
+        "cargo": [],
+        "projected": [
+          { "kind": "module", "type_id": 2875, "state": "active", "charge_type_id": null, "amount": 1, "distance_m": 5000 },
+          { "kind": "drone", "type_id": 2488, "quantity": 2, "amount": 1, "distance_m": 10000 }
+        ],
+        "fleet_buffs": [],
+        "environment": { "effect_type_ids": [], "system_security": null },
+        "options": { "factor_reload": false, "spool": 1, "rah": "adapt" }
+      },
+      "refs": {
+        "character_id": "missing-character",
+        "damage_pattern_id": "uniform",
+        "target_profile_id": "none",
+        "scenario_ids": ["scenario-profile", "scenario-fit"]
+      },
+      "links": {
+        "booster_fit_ids": [],
+        "projected_fits": [{ "fit_id": "app-nested-b", "amount": 1, "distance_m": null }]
+      },
+      "alternatives": [
+        {
+          "id": "weapon-choice",
+          "options": [
+            { "type_id": 2873, "charge_type_id": 21898 },
+            { "type_id": 2874, "charge_type_id": 21899 }
+          ]
+        }
+      ],
+      "branches": [
+        { "id": "standard", "name": "Standard", "picks": { "weapon-choice": 0 } },
+        { "id": "budget", "name": "Budget", "note": "Lower-cost choice", "picks": { "weapon-choice": 1 } }
+      ],
+      "active_branch": "standard",
+      "history": [],
+      "ui": { "vendor_panel": { "collapsed": true } },
+      "vendor_document_extension": { "retain": true }
+    },
+    "command": {
+      "format": "exfa/fit@1",
+      "id": "command",
+      "name": "Command T3D",
+      "fit": {
+        "ship": { "type_id": 33468, "mode_type_id": 37604 },
+        "modules": [],
+        "drones": [],
+        "fighters": [],
+        "implants": [],
+        "boosters": [],
+        "cargo": [],
+        "projected": [],
+        "fleet_buffs": [],
+        "environment": { "effect_type_ids": [], "system_security": "hisec" },
+        "options": { "factor_reload": false, "spool": 1, "rah": "adapt" }
+      },
+      "refs": { "character_id": "pilot", "damage_pattern_id": "uniform", "target_profile_id": "none", "scenario_ids": [] },
+      "links": { "booster_fit_ids": [], "projected_fits": [] },
+      "alternatives": [],
+      "branches": [],
+      "history": []
+    }
+  },
+  "characters": {
+    "all5": { "id": "all5", "name": "All 5", "default_level": 5, "levels": {}, "builtin": true },
+    "pilot": { "id": "pilot", "name": "Pilot", "default_level": 4, "levels": { "3300": 3 }, "security_status": 2.5, "alpha_clone": false }
+  },
+  "damage_patterns": {
+    "uniform": { "id": "uniform", "name": "Uniform", "em": 0.25, "thermal": 0.25, "kinetic": 0.25, "explosive": 0.25, "builtin": true }
+  },
+  "target_profiles": {
+    "none": { "id": "none", "name": "None", "em": 0.5, "thermal": 0.5, "kinetic": 0.5, "explosive": 0.5, "builtin": true },
+    "heavy": {
+      "id": "heavy",
+      "name": "Heavy target",
+      "em": 0.2,
+      "thermal": 0.4,
+      "kinetic": 0.6,
+      "explosive": 0.8,
+      "signature_radius": 120,
+      "max_velocity": 210,
+      "radius": 50,
+      "hp": 8000
+    }
+  },
+  "scenarios": {
+    "scenario-profile": {
+      "id": "scenario-profile",
+      "name": "Fast target",
+      "target": { "profile_id": "heavy" },
+      "params": {
+        "distance_m": 15000,
+        "time_s": null,
+        "tgt_speed_mps": 200,
+        "tgt_speed_pct": null,
+        "tgt_sig_m": 40,
+        "atk_speed_mps": 50,
+        "atk_speed_pct": null,
+        "atk_angle_deg": 30,
+        "tgt_angle_deg": 180
+      },
+      "settings": { "ignore_resists": false, "apply_projected": false }
+    },
+    "scenario-fit": {
+      "id": "scenario-fit",
+      "name": "Fit target",
+      "target": { "fit_id": "app-nested-b", "resist_mode": "auto" },
+      "params": { "distance_m": null, "atk_angle_deg": null },
+      "settings": { "apply_projected": false }
+    }
+  },
+  "fleets": {
+    "fleet-alpha": {
+      "id": "fleet-alpha",
+      "name": "Scenario Fleet",
+      "members": [
+        { "fit_id": "complex", "role": "member" },
+        { "fit_id": "command", "role": "command" }
+      ]
+    }
+  },
+  "future_library_field": { "preserve": true }
+}

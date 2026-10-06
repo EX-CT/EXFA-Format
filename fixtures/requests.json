@@ -1,0 +1,343 @@
+{
+  "app-basic": {
+    "schema_version": 1,
+    "ship": { "type_id": 587, "mode_type_id": null },
+    "character": { "skills": { "default_level": 5, "levels": {} }, "security_status": null, "alpha_clone": false },
+    "modules": [
+      { "type_id": 2873, "slot": "high", "state": "active", "charge_type_id": 21898, "mutation": null, "spool": { "type": "spool_scale", "amount": 0.5 } }
+    ],
+    "drones": [],
+    "fighters": [],
+    "implants": [],
+    "boosters": [],
+    "cargo": [],
+    "fleet": { "buffs": [], "booster_fits": [] },
+    "projected": [],
+    "environment": { "effect_type_ids": [], "system_security": null },
+    "damage_pattern": null,
+    "target_profile": null,
+    "overrides": [],
+    "options": {
+      "factor_reload": false,
+      "default_spool": { "type": "spool_scale", "amount": 1 },
+      "rah": "adapt",
+      "include_attributes": "none",
+      "sources": false,
+      "validate": true,
+      "cap_sim": { "reload": false, "stagger": false, "max_time_s": null }
+    }
+  },
+  "app-nested-a": {
+    "schema_version": 1,
+    "ship": { "type_id": 587, "mode_type_id": null },
+    "character": { "skills": { "default_level": 5, "levels": {} }, "security_status": null, "alpha_clone": false },
+    "modules": [],
+    "drones": [],
+    "fighters": [],
+    "implants": [],
+    "boosters": [],
+    "cargo": [],
+    "fleet": {
+      "buffs": [],
+      "booster_fits": [
+        {
+          "schema_version": 1,
+          "ship": { "type_id": 603, "mode_type_id": null },
+          "character": { "skills": { "default_level": 5, "levels": {} }, "security_status": null, "alpha_clone": false },
+          "modules": [],
+          "drones": [],
+          "fighters": [],
+          "implants": [],
+          "boosters": [],
+          "cargo": [],
+          "fleet": { "buffs": [], "booster_fits": [] },
+          "projected": [],
+          "environment": { "effect_type_ids": [], "system_security": null },
+          "damage_pattern": null,
+          "target_profile": null,
+          "overrides": [],
+          "options": {
+            "factor_reload": false,
+            "default_spool": { "type": "spool_scale", "amount": 1 },
+            "rah": "adapt",
+            "include_attributes": "none",
+            "sources": false,
+            "validate": true,
+            "cap_sim": { "reload": false, "stagger": false, "max_time_s": null }
+          }
+        }
+      ]
+    },
+    "projected": [
+      {
+        "kind": "fit",
+        "fit": {
+          "schema_version": 1,
+          "ship": { "type_id": 603, "mode_type_id": null },
+          "character": { "skills": { "default_level": 5, "levels": {} }, "security_status": null, "alpha_clone": false },
+          "modules": [],
+          "drones": [],
+          "fighters": [],
+          "implants": [],
+          "boosters": [],
+          "cargo": [],
+          "fleet": { "buffs": [], "booster_fits": [] },
+          "projected": [],
+          "environment": { "effect_type_ids": [], "system_security": null },
+          "damage_pattern": null,
+          "target_profile": null,
+          "overrides": [],
+          "options": {
+            "factor_reload": false,
+            "default_spool": { "type": "spool_scale", "amount": 1 },
+            "rah": "adapt",
+            "include_attributes": "none",
+            "sources": false,
+            "validate": true,
+            "cap_sim": { "reload": false, "stagger": false, "max_time_s": null }
+          }
+        },
+        "amount": 1,
+        "distance_m": 5000
+      }
+    ],
+    "environment": { "effect_type_ids": [], "system_security": null },
+    "damage_pattern": null,
+    "target_profile": null,
+    "overrides": [],
+    "options": {
+      "factor_reload": false,
+      "default_spool": { "type": "spool_scale", "amount": 1 },
+      "rah": "adapt",
+      "include_attributes": "none",
+      "sources": false,
+      "validate": true,
+      "cap_sim": { "reload": false, "stagger": false, "max_time_s": null }
+    }
+  },
+  "app-nested-b": {
+    "schema_version": 1,
+    "ship": { "type_id": 603, "mode_type_id": null },
+    "character": { "skills": { "default_level": 5, "levels": {} }, "security_status": null, "alpha_clone": false },
+    "modules": [],
+    "drones": [],
+    "fighters": [],
+    "implants": [],
+    "boosters": [],
+    "cargo": [],
+    "fleet": { "buffs": [], "booster_fits": [] },
+    "projected": [
+      {
+        "kind": "fit",
+        "fit": {
+          "schema_version": 1,
+          "ship": { "type_id": 587, "mode_type_id": null },
+          "character": { "skills": { "default_level": 5, "levels": {} }, "security_status": null, "alpha_clone": false },
+          "modules": [],
+          "drones": [],
+          "fighters": [],
+          "implants": [],
+          "boosters": [],
+          "cargo": [],
+          "fleet": { "buffs": [], "booster_fits": [] },
+          "projected": [],
+          "environment": { "effect_type_ids": [], "system_security": null },
+          "damage_pattern": null,
+          "target_profile": null,
+          "overrides": [],
+          "options": {
+            "factor_reload": false,
+            "default_spool": { "type": "spool_scale", "amount": 1 },
+            "rah": "adapt",
+            "include_attributes": "none",
+            "sources": false,
+            "validate": true,
+            "cap_sim": { "reload": false, "stagger": false, "max_time_s": null }
+          }
+        },
+        "amount": 1,
+        "distance_m": 5000
+      }
+    ],
+    "environment": { "effect_type_ids": [], "system_security": null },
+    "damage_pattern": null,
+    "target_profile": null,
+    "overrides": [],
+    "options": {
+      "factor_reload": false,
+      "default_spool": { "type": "spool_scale", "amount": 1 },
+      "rah": "adapt",
+      "include_attributes": "none",
+      "sources": false,
+      "validate": true,
+      "cap_sim": { "reload": false, "stagger": false, "max_time_s": null }
+    }
+  },
+  "complex": {
+    "schema_version": 1,
+    "ship": { "type_id": 587, "mode_type_id": null },
+    "character": { "skills": { "default_level": 5, "levels": {} }, "security_status": null, "alpha_clone": false },
+    "modules": [
+      {
+        "type_id": 2873,
+        "slot": "high",
+        "state": "active",
+        "charge_type_id": 21898,
+        "mutation": { "base_type_id": 2873, "mutaplasmid_type_id": 49712, "attributes": { "20": 1.1 } },
+        "spool": { "type": "spool_scale", "amount": 0.75 }
+      },
+      { "type_id": 2873, "slot": "high", "state": "online", "charge_type_id": 21898, "mutation": null, "spool": null }
+    ],
+    "drones": [],
+    "fighters": [],
+    "implants": [],
+    "boosters": [],
+    "cargo": [],
+    "fleet": {
+      "buffs": [],
+      "booster_fits": [
+        {
+          "schema_version": 1,
+          "ship": { "type_id": 33468, "mode_type_id": 37604 },
+          "character": { "skills": { "default_level": 4, "levels": { "3300": 3 } }, "security_status": 2.5, "alpha_clone": false },
+          "modules": [],
+          "drones": [],
+          "fighters": [],
+          "implants": [],
+          "boosters": [],
+          "cargo": [],
+          "fleet": { "buffs": [], "booster_fits": [] },
+          "projected": [],
+          "environment": { "effect_type_ids": [], "system_security": "hisec" },
+          "damage_pattern": null,
+          "target_profile": null,
+          "overrides": [],
+          "options": {
+            "factor_reload": false,
+            "default_spool": { "type": "spool_scale", "amount": 1 },
+            "rah": "adapt",
+            "include_attributes": "none",
+            "sources": false,
+            "validate": true,
+            "cap_sim": { "reload": false, "stagger": false, "max_time_s": null }
+          }
+        }
+      ]
+    },
+    "projected": [
+      { "kind": "module", "module": { "type_id": 2875, "state": "active", "charge_type_id": null }, "amount": 1, "distance_m": 5000 },
+      { "kind": "drone", "drone": { "type_id": 2488, "quantity": 2, "active": 2 }, "amount": 1, "distance_m": 10000 },
+      {
+        "kind": "fit",
+        "fit": {
+          "schema_version": 1,
+          "ship": { "type_id": 603, "mode_type_id": null },
+          "character": { "skills": { "default_level": 5, "levels": {} }, "security_status": null, "alpha_clone": false },
+          "modules": [],
+          "drones": [],
+          "fighters": [],
+          "implants": [],
+          "boosters": [],
+          "cargo": [],
+          "fleet": { "buffs": [], "booster_fits": [] },
+          "projected": [],
+          "environment": { "effect_type_ids": [], "system_security": null },
+          "damage_pattern": null,
+          "target_profile": null,
+          "overrides": [],
+          "options": {
+            "factor_reload": false,
+            "default_spool": { "type": "spool_scale", "amount": 1 },
+            "rah": "adapt",
+            "include_attributes": "none",
+            "sources": false,
+            "validate": true,
+            "cap_sim": { "reload": false, "stagger": false, "max_time_s": null }
+          }
+        },
+        "amount": 1,
+        "distance_m": null
+      }
+    ],
+    "environment": { "effect_type_ids": [], "system_security": null },
+    "damage_pattern": null,
+    "target_profile": null,
+    "overrides": [],
+    "options": {
+      "factor_reload": false,
+      "default_spool": { "type": "spool_scale", "amount": 1 },
+      "rah": "adapt",
+      "include_attributes": "none",
+      "sources": false,
+      "validate": true,
+      "cap_sim": { "reload": false, "stagger": false, "max_time_s": null }
+    },
+    "scenarios": [
+      {
+        "id": "scenario-profile",
+        "target": { "profile": { "em": 0.2, "thermal": 0.4, "kinetic": 0.6, "explosive": 0.8, "max_velocity": 210, "signature_radius": 120, "radius": 50, "hp": 8000 } },
+        "params": { "distance_m": 15000, "tgt_speed_mps": 200, "tgt_sig_m": 40, "atk_speed_mps": 50, "atk_angle_deg": 30, "tgt_angle_deg": 180 },
+        "settings": { "ignore_resists": false, "apply_projected": false }
+      },
+      {
+        "id": "scenario-fit",
+        "target": {
+          "fit": {
+            "schema_version": 1,
+            "ship": { "type_id": 603, "mode_type_id": null },
+            "character": { "skills": { "default_level": 5, "levels": {} }, "security_status": null, "alpha_clone": false },
+            "modules": [],
+            "drones": [],
+            "fighters": [],
+            "implants": [],
+            "boosters": [],
+            "cargo": [],
+            "fleet": { "buffs": [], "booster_fits": [] },
+            "projected": [],
+            "environment": { "effect_type_ids": [], "system_security": null },
+            "damage_pattern": null,
+            "target_profile": null,
+            "overrides": [],
+            "options": {
+              "factor_reload": false,
+              "default_spool": { "type": "spool_scale", "amount": 1 },
+              "rah": "adapt",
+              "include_attributes": "none",
+              "sources": false,
+              "validate": true,
+              "cap_sim": { "reload": false, "stagger": false, "max_time_s": null }
+            }
+          },
+          "resist_mode": "auto"
+        },
+        "settings": { "apply_projected": false }
+      }
+    ]
+  },
+  "command": {
+    "schema_version": 1,
+    "ship": { "type_id": 33468, "mode_type_id": 37604 },
+    "character": { "skills": { "default_level": 4, "levels": { "3300": 3 } }, "security_status": 2.5, "alpha_clone": false },
+    "modules": [],
+    "drones": [],
+    "fighters": [],
+    "implants": [],
+    "boosters": [],
+    "cargo": [],
+    "fleet": { "buffs": [], "booster_fits": [] },
+    "projected": [],
+    "environment": { "effect_type_ids": [], "system_security": "hisec" },
+    "damage_pattern": null,
+    "target_profile": null,
+    "overrides": [],
+    "options": {
+      "factor_reload": false,
+      "default_spool": { "type": "spool_scale", "amount": 1 },
+      "rah": "adapt",
+      "include_attributes": "none",
+      "sources": false,
+      "validate": true,
+      "cap_sim": { "reload": false, "stagger": false, "max_time_s": null }
+    }
+  }
+}

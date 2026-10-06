@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EX-CT/EXFA-Format/schema/common.schema.json",
+  "$defs": {
+    "opaqueId": { "type": "string" },
+    "typeId": { "type": "integer", "minimum": 0 },
+    "unknownObject": { "type": "object", "additionalProperties": true },
+    "mutation": {
+      "type": "object",
+      "required": ["base_type_id", "mutaplasmid_type_id", "attributes"],
+      "properties": {
+        "base_type_id": { "$ref": "#/$defs/typeId" },
+        "mutaplasmid_type_id": { "$ref": "#/$defs/typeId" },
+        "attributes": { "type": "object", "additionalProperties": { "type": "number" } }
+      },
+      "additionalProperties": true
+    }
+  }
+}

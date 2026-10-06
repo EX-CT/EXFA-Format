@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EX-CT/EXFA-Format/schema/library-index.schema.json",
+  "title": "EXFA Library Index v1",
+  "type": "object",
+  "required": ["format", "folders", "characters", "damage_patterns", "target_profiles", "scenarios", "fleets"],
+  "properties": {
+    "format": { "const": "exfa/library-index@1" },
+    "folders": { "type": "array", "items": { "type": "string" } },
+    "characters": { "type": "object", "additionalProperties": { "$ref": "library.schema.json#/$defs/character" } },
+    "damage_patterns": { "type": "object", "additionalProperties": { "$ref": "library.schema.json#/$defs/damagePattern" } },
+    "target_profiles": { "type": "object", "additionalProperties": { "$ref": "library.schema.json#/$defs/targetProfile" } },
+    "scenarios": { "type": "object", "additionalProperties": { "$ref": "scenario.schema.json" } },
+    "fleets": { "type": "object", "additionalProperties": { "$ref": "library.schema.json#/$defs/fleet" } }
+  },
+  "additionalProperties": true
+}

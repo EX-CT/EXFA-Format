@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EX-CT/EXFA-Format/schema/fit-document.schema.json",
+  "title": "EXFA Fit Document v1",
+  "type": "object",
+  "required": ["format", "id", "name", "fit", "refs", "links", "alternatives", "branches", "history"],
+  "properties": {
+    "format": { "const": "exfa/fit@1" },
+    "id": { "$ref": "common.schema.json#/$defs/opaqueId" },
+    "name": { "type": "string" },
+    "notes": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "folder": { "type": "string" },
+    "created": { "type": "string" },
+    "modified": { "type": "string" },
+    "sde": {
+      "type": "object",
+      "required": ["build"],
+      "properties": { "build": { "type": "integer" }, "dataset_revision": { "type": ["integer", "null"] } },
+      "additionalProperties": true
+    },
+    "fit": {
+      "type": "object",
+      "required": ["ship", "modules", "drones", "fighters", "implants", "boosters", "cargo", "projected", "fleet_buffs", "environment", "options"],
+      "properties": {
+        "ship": {
+          "type": "object",
+          "required": ["type_id"],
+          "properties": { "type_id": { "$ref": "common.schema.json#/$defs/typeId" }, "mode_type_id": { "type": ["integer", "null"] } },
+          "additionalProperties": true
+        },
+        "modules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type_id", "slot", "state"],
+            "properties": {
+              "type_id": { "$ref": "common.schema.json#/$defs/typeId" },
+              "slot": { "enum": ["high", "mid", "low", "rig", "subsystem", "service"] },
+              "state": { "enum": ["offline", "online", "active", "overheated"] },
+              "charge_type_id": { "type": ["integer", "null"] },
+              "mutation": { "anyOf": [{ "$ref": "common.schema.json#/$defs/mutation" }, { "type": "null" }] },
+              "spool": { "type": ["number", "null"] },
+              "group": { "type": ["integer", "null"] },
+              "alt_id": { "type": ["string", "null"] }
+            },
+            "additionalProperties": true
+          }
+        },
+        "drones": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type_id", "quantity", "active"],
+            "properties": {
+              "type_id": { "$ref": "common.schema.json#/$defs/typeId" },
+              "quantity": { "type": "integer", "minimum": 1 },
+              "active": { "type": "integer", "minimum": 0 },
+              "mutation": { "anyOf": [{ "$ref": "common.schema.json#/$defs/mutation" }, { "type": "null" }] },
+              "alt_id": { "type": ["string", "null"] }
+            },
+            "additionalProperties": true
+          }
+        },
+        "fighters": { "type": "array", "items": { "type": "object", "required": ["type_id", "quantity", "active"], "properties": {
+          "type_id": { "$ref": "common.schema.json#/$defs/typeId" }, "quantity": { "type": "integer" }, "active": { "type": "boolean" }, "abilities": { "type": ["array", "null"], "items": { "type": "integer" } }
+        }, "additionalProperties": true } },
+        "implants": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/typeId" } },
+        "boosters": { "type": "array", "items": { "type": "object", "required": ["type_id"], "properties": {
+          "type_id": { "$ref": "common.schema.json#/$defs/typeId" }, "side_effects": { "type": "array", "items": { "type": "integer" } }
+        }, "additionalProperties": true } },
+        "cargo": { "type": "array", "items": { "type": "object", "required": ["type_id", "quantity"], "properties": {
+          "type_id": { "$ref": "common.schema.json#/$defs/typeId" }, "quantity": { "type": "integer" }, "alt_id": { "type": ["string", "null"] }
+        }, "additionalProperties": true } },
+        "projected": { "type": "array", "items": { "type": "object", "required": ["kind", "type_id", "amount", "distance_m"], "properties": {
+          "kind": { "enum": ["module", "drone", "fighter"] }, "type_id": { "$ref": "common.schema.json#/$defs/typeId" },
+          "state": { "enum": ["offline", "online", "active", "overheated"] }, "charge_type_id": { "type": ["integer", "null"] },
+          "quantity": { "type": "integer" }, "amount": { "type": "number" }, "distance_m": { "type": ["number", "null"] }
+        }, "additionalProperties": true } },
+        "fleet_buffs": { "type": "array", "items": { "type": "object", "required": ["buff_id", "value"], "properties": {
+          "buff_id": { "type": "integer" }, "value": { "type": "number" }
+        }, "additionalProperties": true } },
+        "environment": { "type": "object", "required": ["effect_type_ids", "system_security"], "properties": {
+          "effect_type_ids": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/typeId" } },
+          "system_security": { "enum": ["hisec", "lowsec", "nullsec", "wspace", null] }
+        }, "additionalProperties": true },
+        "overrides": { "type": "array", "items": { "type": "object", "required": ["type_id", "attribute_id", "value"], "properties": {
+          "type_id": { "$ref": "common.schema.json#/$defs/typeId" }, "attribute_id": { "type": "integer" }, "value": { "type": "number" }
+        }, "additionalProperties": true } },
+        "options": { "type": "object", "required": ["factor_reload", "spool", "rah"], "properties": {
+          "factor_reload": { "type": "boolean" }, "spool": { "type": "number" }, "rah": { "enum": ["adapt", "disable"] }
+        }, "additionalProperties": true }
+      },
+      "additionalProperties": true
+    },
+    "refs": {
+      "type": "object",
+      "required": ["character_id", "damage_pattern_id", "target_profile_id", "scenario_ids"],
+      "properties": {
+        "character_id": { "$ref": "common.schema.json#/$defs/opaqueId" },
+        "damage_pattern_id": { "$ref": "common.schema.json#/$defs/opaqueId" },
+        "target_profile_id": { "$ref": "common.schema.json#/$defs/opaqueId" },
+        "scenario_ids": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/opaqueId" } }
+      },
+      "additionalProperties": true
+    },
+    "links": {
+      "type": "object",
+      "required": ["booster_fit_ids", "projected_fits"],
+      "properties": {
+        "booster_fit_ids": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/opaqueId" } },
+        "projected_fits": { "type": "array", "items": { "type": "object", "required": ["fit_id", "amount", "distance_m"], "properties": {
+          "fit_id": { "$ref": "common.schema.json#/$defs/opaqueId" }, "amount": { "type": "number" }, "distance_m": { "type": ["number", "null"] }
+        }, "additionalProperties": true } }
+      },
+      "additionalProperties": true
+    },
+    "alternatives": { "type": "array", "items": { "type": "object", "required": ["id", "options"], "properties": {
+      "id": { "$ref": "common.schema.json#/$defs/opaqueId" }, "options": { "type": "array", "items": { "type": "object", "required": ["type_id"], "properties": {
+        "type_id": { "$ref": "common.schema.json#/$defs/typeId" }, "charge_type_id": { "type": ["integer", "null"] }, "quantity": { "type": ["integer", "null"] }
+      }, "additionalProperties": true } }
+    }, "additionalProperties": true } },
+    "branches": { "type": "array", "items": { "type": "object", "required": ["id", "name", "picks"], "properties": {
+      "id": { "$ref": "common.schema.json#/$defs/opaqueId" }, "name": { "type": "string" }, "note": { "type": "string" },
+      "picks": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } }
+    }, "additionalProperties": true } },
+    "active_branch": { "type": ["string", "null"] },
+    "history": { "type": "array", "maxItems": 50, "items": { "type": "object", "required": ["at", "fit"], "properties": {
+      "at": { "type": "string" }, "fit": { "$ref": "#/properties/fit" }, "note": { "type": "string" }
+    }, "additionalProperties": true } },
+    "ui": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": true
+}

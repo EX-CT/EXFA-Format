@@ -1,0 +1,75 @@
+{
+  "format": "eve-fit-web-library",
+  "version": 2,
+  "exported_at": "2026-10-06T12:00:00.000Z",
+  "implant_sets": [{ "name": "Training" }],
+  "backup_extension": "preserve-this",
+  "lib": {
+    "fits": {
+      "old-rifter": {
+        "id": "old-rifter",
+        "name": "Legacy Rifter",
+        "ship_type_id": 587,
+        "mode_type_id": null,
+        "modules": [
+          {
+            "type_id": 2873,
+            "slot": "high",
+            "state": "active",
+            "charge_type_id": 21898,
+            "mutation": { "base_type_id": 2873, "mutaplasmid_type_id": 49712, "attributes": { "20": 1.1 } },
+            "spool": 0.5
+          }
+        ],
+        "drones": [],
+        "fighters": [],
+        "implants": [],
+        "boosters": [],
+        "cargo": [],
+        "projected": [
+          { "kind": "module", "type_id": 2875, "state": "active", "charge_type_id": null, "amount": 1, "distance_m": 5000, "future_projected_field": "keep" },
+          { "kind": "fit", "fit_id": "old-support", "amount": 1, "distance_m": null }
+        ],
+        "fleet": { "booster_fit_ids": ["old-support"], "buffs": [], "future_fleet_field": true },
+        "environment": [11],
+        "system_security": "hisec",
+        "character_id": "all5",
+        "damage_pattern_id": "uniform",
+        "target_profile_id": "none",
+        "options": { "factor_reload": true, "spool": 0.75, "rah": "disable", "future_option": "keep" },
+        "notes": "Imported notes",
+        "folder": "PvP/Frigates",
+        "tags": ["solo"],
+        "modified": "2025-01-02T03:04:05.000Z",
+        "legacy_fit_field": { "keep": true }
+      },
+      "old-support": {
+        "id": "old-support",
+        "name": "Support",
+        "ship_type_id": 603,
+        "mode_type_id": null,
+        "modules": [],
+        "drones": [],
+        "fighters": [],
+        "implants": [],
+        "boosters": [],
+        "cargo": [],
+        "projected": [],
+        "fleet": { "booster_fit_ids": [], "buffs": [] },
+        "environment": [],
+        "system_security": null,
+        "character_id": "all5",
+        "damage_pattern_id": "uniform",
+        "target_profile_id": "none",
+        "options": { "factor_reload": false, "spool": 1, "rah": "adapt" }
+      }
+    },
+    "characters": {
+      "all5": { "id": "all5", "name": "All 5", "default_level": 5, "levels": {}, "builtin": true }
+    },
+    "damagePatterns": {},
+    "targetProfiles": {},
+    "folders": ["Empty"],
+    "legacy_library_field": "preserve"
+  }
+}

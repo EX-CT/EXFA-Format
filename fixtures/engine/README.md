@@ -1,0 +1,5 @@
+# Engine contract fixture
+
+`fit-request.schema.json` is copied byte-for-byte from EXFA-Engine tag `v0.2.0` (`contract/schema/fit-request.schema.json`).
+
+There is a contract/schema mismatch with the current App adapter: App `toRequest` deliberately emits explicit `null` for optional request values (for example `ship.mode_type_id`, module `charge_type_id`/`mutation`/`spool`, and absent damage/target profiles), and passes the UI security labels `hisec`/`wspace` through unchanged. The v0.2.0 schema does not accept those nulls and only lists `highsec`/`wormhole`. Changing `resolve` would break the required App request parity. The TypeScript fixture checks therefore validate the raw request against a narrowly widened copy of the schema and validate a schema-normalized view against the unmodified Engine schema. The upstream file remains unchanged.

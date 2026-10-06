@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EX-CT/EXFA-Format/schema/library.schema.json",
+  "title": "EXFA Library v1",
+  "type": "object",
+  "required": ["format", "folders", "fits", "characters", "damage_patterns", "target_profiles", "scenarios", "fleets"],
+  "properties": {
+    "format": { "const": "exfa/library@1" },
+    "folders": { "type": "array", "items": { "type": "string" } },
+    "fits": { "type": "object", "additionalProperties": { "$ref": "fit-document.schema.json" } },
+    "characters": { "type": "object", "additionalProperties": { "$ref": "#/$defs/character" } },
+    "damage_patterns": { "type": "object", "additionalProperties": { "$ref": "#/$defs/damagePattern" } },
+    "target_profiles": { "type": "object", "additionalProperties": { "$ref": "#/$defs/targetProfile" } },
+    "scenarios": { "type": "object", "additionalProperties": { "$ref": "scenario.schema.json" } },
+    "fleets": { "type": "object", "additionalProperties": { "$ref": "#/$defs/fleet" } }
+  },
+  "$defs": {
+    "character": { "type": "object", "required": ["id", "name", "default_level", "levels"], "properties": {
+      "id": { "$ref": "common.schema.json#/$defs/opaqueId" }, "name": { "type": "string" }, "default_level": { "type": "integer", "minimum": 0, "maximum": 5 },
+      "levels": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 5 } },
+      "security_status": { "type": ["number", "null"] }, "alpha_clone": { "type": "boolean" }, "builtin": { "type": "boolean" },
+      "esi": { "type": "object", "additionalProperties": true }
+    }, "additionalProperties": true },
+    "damagePattern": { "type": "object", "required": ["id", "name", "em", "thermal", "kinetic", "explosive"], "properties": {
+      "id": { "$ref": "common.schema.json#/$defs/opaqueId" }, "name": { "type": "string" }, "em": { "type": "number" }, "thermal": { "type": "number" },
+      "kinetic": { "type": "number" }, "explosive": { "type": "number" }, "builtin": { "type": "boolean" }
+    }, "additionalProperties": true },
+    "targetProfile": { "type": "object", "required": ["id", "name", "em", "thermal", "kinetic", "explosive"], "properties": {
+      "id": { "$ref": "common.schema.json#/$defs/opaqueId" }, "name": { "type": "string" }, "em": { "type": "number" }, "thermal": { "type": "number" },
+      "kinetic": { "type": "number" }, "explosive": { "type": "number" }, "signature_radius": { "type": ["number", "null"] },
+      "max_velocity": { "type": ["number", "null"] }, "radius": { "type": ["number", "null"] }, "hp": { "type": ["number", "null"] }, "builtin": { "type": "boolean" }
+    }, "additionalProperties": true },
+    "fleet": { "type": "object", "required": ["id", "name", "members"], "properties": {
+      "id": { "$ref": "common.schema.json#/$defs/opaqueId" }, "name": { "type": "string" }, "folder": { "type": "string" },
+      "notes": { "type": "string" }, "members": { "type": "array", "items": { "type": "object", "required": ["fit_id", "role"], "properties": {
+        "fit_id": { "$ref": "common.schema.json#/$defs/opaqueId" }, "role": { "enum": ["command", "member"] }
+      }, "additionalProperties": true } }
+    }, "additionalProperties": true }
+  },
+  "additionalProperties": true
+}

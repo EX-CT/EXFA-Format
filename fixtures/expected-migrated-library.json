@@ -1,0 +1,106 @@
+{
+  "format": "exfa/library@1",
+  "folders": ["Empty"],
+  "fits": {
+    "old-rifter": {
+      "format": "exfa/fit@1",
+      "id": "old-rifter",
+      "name": "Legacy Rifter",
+      "notes": "Imported notes",
+      "tags": ["solo"],
+      "modified": "2025-01-02T03:04:05.000Z",
+      "fit": {
+        "ship": { "type_id": 587, "mode_type_id": null },
+        "modules": [
+          {
+            "type_id": 2873,
+            "slot": "high",
+            "state": "active",
+            "charge_type_id": 21898,
+            "mutation": { "base_type_id": 2873, "mutaplasmid_type_id": 49712, "attributes": { "20": 1.1 } },
+            "spool": 0.5
+          }
+        ],
+        "drones": [],
+        "fighters": [],
+        "implants": [],
+        "boosters": [],
+        "cargo": [],
+        "projected": [
+          {
+            "kind": "module",
+            "type_id": 2875,
+            "state": "active",
+            "charge_type_id": null,
+            "amount": 1,
+            "distance_m": 5000,
+            "future_projected_field": "keep"
+          }
+        ],
+        "fleet_buffs": [],
+        "environment": { "effect_type_ids": [11], "system_security": "hisec" },
+        "overrides": [],
+        "options": { "factor_reload": true, "spool": 0.75, "rah": "disable", "future_option": "keep" }
+      },
+      "refs": { "character_id": "all5", "damage_pattern_id": "uniform", "target_profile_id": "none", "scenario_ids": [] },
+      "links": {
+        "booster_fit_ids": ["old-support"],
+        "projected_fits": [{ "fit_id": "old-support", "amount": 1, "distance_m": null }]
+      },
+      "alternatives": [],
+      "branches": [],
+      "history": [],
+      "folder": "PvP/Frigates",
+      "ui": {
+        "legacy": {
+          "legacy_fit_field": { "keep": true },
+          "fleet": { "future_fleet_field": true },
+          "options": { "future_option": "keep" }
+        }
+      }
+    },
+    "old-support": {
+      "format": "exfa/fit@1",
+      "id": "old-support",
+      "name": "Support",
+      "fit": {
+        "ship": { "type_id": 603, "mode_type_id": null },
+        "modules": [],
+        "drones": [],
+        "fighters": [],
+        "implants": [],
+        "boosters": [],
+        "cargo": [],
+        "projected": [],
+        "fleet_buffs": [],
+        "environment": { "effect_type_ids": [], "system_security": null },
+        "overrides": [],
+        "options": { "factor_reload": false, "spool": 1, "rah": "adapt" }
+      },
+      "refs": { "character_id": "all5", "damage_pattern_id": "uniform", "target_profile_id": "none", "scenario_ids": [] },
+      "links": { "booster_fit_ids": [], "projected_fits": [] },
+      "alternatives": [],
+      "branches": [],
+      "history": []
+    }
+  },
+  "characters": {
+    "all5": { "id": "all5", "name": "All 5", "default_level": 5, "levels": {}, "builtin": true }
+  },
+  "damage_patterns": {},
+  "target_profiles": {},
+  "scenarios": {},
+  "fleets": {},
+  "ui": {
+    "legacy": {
+      "library": { "legacy_library_field": "preserve" },
+      "backup": {
+        "format": "eve-fit-web-library",
+        "version": 2,
+        "exported_at": "2026-10-06T12:00:00.000Z",
+        "implant_sets": [{ "name": "Training" }],
+        "backup_extension": "preserve-this"
+      }
+    }
+  }
+}
