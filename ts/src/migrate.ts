@@ -156,6 +156,7 @@ function normalizeLibrary(source: Obj): Library {
     target_profiles: record(source.target_profiles),
     scenarios: record(source.scenarios),
     fleets: record(source.fleets),
+    groups: record(source.groups),
   } as Library;
 }
 
@@ -164,7 +165,7 @@ export function migrateLegacyLibrary(value: unknown): Library {
   if (!source.fits || typeof source.fits !== 'object' || Array.isArray(source.fits)) {
     throw new FormatError('INVALID_LIBRARY', 'Legacy library must contain a fits map');
   }
-  const known = ['format', 'fits', 'characters', 'damagePatterns', 'damage_patterns', 'targetProfiles', 'target_profiles', 'folders', 'scenarios', 'fleets'];
+  const known = ['format', 'fits', 'characters', 'damagePatterns', 'damage_patterns', 'targetProfiles', 'target_profiles', 'folders', 'scenarios', 'fleets', 'groups'];
   const library = normalizeLibrary({
     ...(source.ui !== undefined ? { ui: source.ui } : {}),
     format: 'exfa/library@1',
@@ -175,6 +176,7 @@ export function migrateLegacyLibrary(value: unknown): Library {
     target_profiles: source.target_profiles ?? source.targetProfiles ?? {},
     scenarios: source.scenarios ?? {},
     fleets: source.fleets ?? {},
+    groups: source.groups ?? {},
   });
   const unknown = omit(source, known);
   if (Object.keys(unknown).length) {

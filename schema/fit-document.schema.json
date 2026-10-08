@@ -35,6 +35,7 @@
             "type": "object",
             "required": ["type_id", "slot", "state"],
             "properties": {
+              "id": { "$ref": "common.schema.json#/$defs/opaqueId" },
               "type_id": { "$ref": "common.schema.json#/$defs/typeId" },
               "slot": { "enum": ["high", "mid", "low", "rig", "subsystem", "service"] },
               "state": { "enum": ["offline", "online", "active", "overheated"] },
@@ -53,6 +54,7 @@
             "type": "object",
             "required": ["type_id", "quantity", "active"],
             "properties": {
+              "id": { "$ref": "common.schema.json#/$defs/opaqueId" },
               "type_id": { "$ref": "common.schema.json#/$defs/typeId" },
               "quantity": { "type": "integer", "minimum": 1 },
               "active": { "type": "integer", "minimum": 0 },
@@ -63,6 +65,7 @@
           }
         },
         "fighters": { "type": "array", "items": { "type": "object", "required": ["type_id", "quantity", "active"], "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/opaqueId" },
           "type_id": { "$ref": "common.schema.json#/$defs/typeId" }, "quantity": { "type": "integer" }, "active": { "type": "boolean" }, "abilities": { "type": ["array", "null"], "items": { "type": "integer" } }
         }, "additionalProperties": true } },
         "implants": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/typeId" } },
@@ -70,6 +73,7 @@
           "type_id": { "$ref": "common.schema.json#/$defs/typeId" }, "side_effects": { "type": "array", "items": { "type": "integer" } }
         }, "additionalProperties": true } },
         "cargo": { "type": "array", "items": { "type": "object", "required": ["type_id", "quantity"], "properties": {
+          "id": { "$ref": "common.schema.json#/$defs/opaqueId" },
           "type_id": { "$ref": "common.schema.json#/$defs/typeId" }, "quantity": { "type": "integer" }, "alt_id": { "type": ["string", "null"] }
         }, "additionalProperties": true } },
         "projected": { "type": "array", "items": { "type": "object", "required": ["kind", "type_id", "amount", "distance_m"], "properties": {

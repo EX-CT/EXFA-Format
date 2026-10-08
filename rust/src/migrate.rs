@@ -193,9 +193,10 @@ fn migrate_legacy_library(value: Value) -> Result<Library, FormatError> {
         "target_profiles": source.get("target_profiles").or_else(|| source.get("targetProfiles")).cloned().filter(Value::is_object).unwrap_or_else(|| json!({})),
         "scenarios": source.get("scenarios").cloned().filter(Value::is_object).unwrap_or_else(|| json!({})),
         "fleets": source.get("fleets").cloned().filter(Value::is_object).unwrap_or_else(|| json!({})),
+        "groups": source.get("groups").cloned().filter(Value::is_object).unwrap_or_else(|| json!({})),
     });
     let extras = unknown_fields(&source, &[
-        "format", "fits", "characters", "damagePatterns", "damage_patterns", "targetProfiles", "target_profiles", "folders", "scenarios", "fleets",
+        "format", "fits", "characters", "damagePatterns", "damage_patterns", "targetProfiles", "target_profiles", "folders", "scenarios", "fleets", "groups",
     ]);
     if !extras.is_empty() {
         let extra_value = json!({ "library": extras });
@@ -227,7 +228,7 @@ pub fn migrate(value: Value) -> Result<Library, FormatError> {
     }
     if format == "exfa/library@1" {
         source.insert("format".to_owned(), json!("exfa/library@1"));
-        for key in ["folders", "fits", "characters", "damage_patterns", "target_profiles", "scenarios", "fleets"] {
+        for key in ["folders", "fits", "characters", "damage_patterns", "target_profiles", "scenarios", "fleets", "groups"] {
             if !source.contains_key(key) {
                 let empty = if key == "folders" { json!([]) } else { json!({}) };
                 source.insert(key.to_owned(), empty);

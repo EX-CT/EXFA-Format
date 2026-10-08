@@ -14,9 +14,14 @@
       "base_type_id": {"$ref": "#/$defs/typeId"}, "mutaplasmid_type_id": {"$ref": "#/$defs/typeId"},
       "attributes": {"type": "object", "additionalProperties": {"type": "number"}}}},
     "module": {"type": "object", "required": ["type_id"], "properties": {
+      "id": {"type": "string"},
       "type_id": {"$ref": "#/$defs/typeId"}, "slot": {"$ref": "#/$defs/slot"},
       "state": {"$ref": "#/$defs/state"}, "charge_type_id": {"$ref": "#/$defs/typeId"},
       "mutation": {"$ref": "#/$defs/mutation"}, "spool": {"$ref": "#/$defs/spool"}}},
+    "select": {"type": "object", "properties": {
+      "module_ids": {"type": "array", "items": {"type": "string"}},
+      "drone_ids": {"type": "array", "items": {"type": "string"}},
+      "fighter_ids": {"type": "array", "items": {"type": "string"}}}},
     "resists": {"type": "object", "properties": {
       "em": {"type": "number"}, "thermal": {"type": "number"}, "kinetic": {"type": "number"}, "explosive": {"type": "number"}}},
     "fit": {"$ref": "#"},
@@ -56,15 +61,18 @@
       "security_status": {"type": "number", "minimum": -10, "maximum": 5}}},
     "modules": {"type": "array", "items": {"$ref": "#/$defs/module"}},
     "drones": {"type": "array", "items": {"type": "object", "required": ["type_id", "quantity"], "properties": {
+      "id": {"type": "string"},
       "type_id": {"$ref": "#/$defs/typeId"}, "quantity": {"type": "integer", "minimum": 1},
       "active": {"type": "integer", "minimum": 0}, "mutation": {"$ref": "#/$defs/mutation"}}}},
     "fighters": {"type": "array", "items": {"type": "object", "required": ["type_id"], "properties": {
+      "id": {"type": "string"},
       "type_id": {"$ref": "#/$defs/typeId"}, "quantity": {"type": "integer"}, "active": {"type": "boolean"},
       "abilities": {"type": "array", "items": {"type": "integer"}}}}},
     "implants": {"type": "array", "items": {"$ref": "#/$defs/typeId"}},
     "boosters": {"type": "array", "items": {"type": "object", "required": ["type_id"], "properties": {
       "type_id": {"$ref": "#/$defs/typeId"}, "side_effects": {"type": "array", "items": {"type": "integer"}}}}},
     "cargo": {"type": "array", "items": {"type": "object", "properties": {
+      "id": {"type": "string"},
       "type_id": {"$ref": "#/$defs/typeId"}, "quantity": {"type": "integer"}}}},
     "fleet": {"type": "object", "properties": {
       "buffs": {"type": "array", "items": {"type": "object", "required": ["buff_id", "value"], "properties": {
@@ -73,6 +81,7 @@
     "projected": {"type": "array", "items": {"type": "object", "required": ["kind"], "properties": {
       "kind": {"enum": ["module", "drone", "fighter", "fit"]},
       "module": {"$ref": "#/$defs/module"}, "fit": {"$ref": "#/$defs/fit"},
+      "select": {"$ref": "#/$defs/select"},
       "amount": {"type": "integer", "minimum": 1}, "distance_m": {"type": ["number", "null"]}}}},
     "environment": {"type": "object", "properties": {
       "effect_type_ids": {"type": "array", "items": {"$ref": "#/$defs/typeId"}},

@@ -4,9 +4,10 @@ import { migrateFitDocument } from './migrate.js';
 export interface FormatFile { path: string; text: string }
 
 const INDEX_PATH = 'library.exfa.json';
+const GROUP_DIR = 'groups';
 const DOC_ORDER = ['format', 'id', 'name', 'notes', 'tags', 'created', 'modified', 'sde', 'fit', 'refs', 'links', 'alternatives', 'branches', 'active_branch', 'history', 'ui'];
 const FIELD_ORDER: Record<string, string[]> = {
-  libraryIndex: ['format', 'folders', 'characters', 'damage_patterns', 'target_profiles', 'scenarios', 'fleets'],
+  libraryIndex: ['format', 'folders', 'characters', 'damage_patterns', 'target_profiles', 'scenarios', 'fleets', 'groups'],
   fitDocument: DOC_ORDER,
   fit: ['ship', 'modules', 'drones', 'fighters', 'implants', 'boosters', 'cargo', 'projected', 'fleet_buffs', 'environment', 'overrides', 'options'],
   ship: ['type_id', 'mode_type_id'],
@@ -24,11 +25,14 @@ const FIELD_ORDER: Record<string, string[]> = {
   targetProfile: ['id', 'name', 'em', 'thermal', 'kinetic', 'explosive', 'signature_radius', 'max_velocity', 'radius', 'hp', 'builtin'],
   scenario: ['id', 'name', 'builtin', 'target', 'params', 'settings'],
   fleet: ['id', 'name', 'folder', 'notes', 'members'],
-  modules: ['type_id', 'slot', 'state', 'charge_type_id', 'mutation', 'spool', 'group', 'alt_id'],
-  drones: ['type_id', 'quantity', 'active', 'mutation', 'alt_id'],
-  fighters: ['type_id', 'quantity', 'active', 'abilities'],
+  group: ['format', 'id', 'name', 'folder', 'notes', 'actors', 'relations'],
+  actors: ['id', 'fit_id', 'label', 'role'],
+  relations: ['id', 'kind', 'source', 'targets', 'source_item_ids', 'amount', 'distance_m', 'enabled', 'notes'],
+  modules: ['id', 'type_id', 'slot', 'state', 'charge_type_id', 'mutation', 'spool', 'group', 'alt_id'],
+  drones: ['id', 'type_id', 'quantity', 'active', 'mutation', 'alt_id'],
+  fighters: ['id', 'type_id', 'quantity', 'active', 'abilities'],
   boosters: ['type_id', 'side_effects'],
-  cargo: ['type_id', 'quantity', 'alt_id'],
+  cargo: ['id', 'type_id', 'quantity', 'alt_id'],
   projected: ['kind', 'type_id', 'state', 'charge_type_id', 'quantity', 'amount', 'distance_m'],
   fleet_buffs: ['buff_id', 'value'],
   environment: ['effect_type_ids', 'system_security'],
@@ -46,7 +50,7 @@ function stable(value: unknown, key = ''): unknown {
   const known = preferred.filter((item) => Object.hasOwn(source, item));
   const rest = Object.keys(source).filter((item) => !preferred.includes(item)).sort();
   const childKey = (item: string) => {
-    if (key === 'libraryIndex' && ['characters', 'damage_patterns', 'target_profiles', 'scenarios', 'fleets'].includes(item)) return item;
+    if (key === 'libraryIndex' && ['characters', 'damage_patterns', 'target_profiles', 'scenarios', 'fleets', 'groups'].includes(item)) return item;
     if (key === 'fitDocument' && item === 'fit') return 'fit';
     if (key === 'fitDocument' && item === 'refs') return 'refs';
     if (key === 'fit' && item === 'options') return 'fitOptions';
@@ -54,14 +58,14 @@ function stable(value: unknown, key = ''): unknown {
     return item;
   };
   return Object.fromEntries([...known, ...rest].map((item) => {
-    const valueKey = key === 'libraryIndex' && ['characters', 'damage_patterns', 'target_profiles', 'scenarios', 'fleets'].includes(item)
+    const valueKey = key === 'libraryIndex' && ['characters', 'damage_patterns', 'target_profiles', 'scenarios', 'fleets', 'groups'].includes(item)
       ? 'mapValues'
       : item;
     if (valueKey === 'mapValues' && source[item] && typeof source[item] === 'object' && !Array.isArray(source[item])) {
       const entries = Object.entries(source[item] as Record<string, unknown>).sort(([a], [b]) => a.localeCompare(b));
       const mapValueKey = item === 'damage_patterns' ? 'damagePattern'
         : item === 'target_profiles' ? 'targetProfile' : item === 'scenarios' ? 'scenario'
-          : item === 'fleets' ? 'fleet' : 'character';
+          : item === 'fleets' ? 'fleet' : item === 'groups' ? 'group' : 'character';
       const mapping = Object.fromEntries(entries.map(([id, entry]) => [id, stable(entry, mapValueKey)]));
       return [item, mapping];
     }
@@ -90,7 +94,7 @@ function json(value: unknown, key: string): string {
 }
 
 export function toFiles(library: Library): FormatFile[] {
-  const known = ['format', 'folders', 'fits', 'characters', 'damage_patterns', 'target_profiles', 'scenarios', 'fleets'];
+  const known = ['format', 'folders', 'fits', 'characters', 'damage_patterns', 'target_profiles', 'scenarios', 'fleets', 'groups'];
   const index = {
     format: 'exfa/library-index@1',
     folders: [...new Set(library.folders.map((folder) => safeFolder(folder)).filter(Boolean))],
@@ -99,6 +103,7 @@ export function toFiles(library: Library): FormatFile[] {
     target_profiles: library.target_profiles,
     scenarios: library.scenarios,
     fleets: library.fleets,
+    groups: library.groups ?? {},
     ...Object.fromEntries(Object.entries(library).filter(([key]) => !known.includes(key)).sort(([a], [b]) => a.localeCompare(b))),
   };
   const files: FormatFile[] = [{ path: INDEX_PATH, text: json(index, 'libraryIndex') }];
@@ -111,6 +116,9 @@ export function toFiles(library: Library): FormatFile[] {
     const path = `${folder ? `${folder}/` : ''}${safeSegment(document.name)}.${safeId(document.id)}.exfa.json`;
     const { folder: _folder, ...onDisk } = document;
     files.push({ path, text: json(onDisk, 'fitDocument') });
+  }
+  for (const group of Object.values(library.groups ?? {}).sort((a, b) => a.id.localeCompare(b.id))) {
+    files.push({ path: `${GROUP_DIR}/${safeId(group.id)}.json`, text: json(group, 'group') });
   }
   return files;
 }
@@ -133,6 +141,7 @@ export function fromFiles(files: FormatFile[]): Library {
     target_profiles: {},
     scenarios: {},
     fleets: {},
+    groups: {},
   };
   const cleaned = files.map((file) => ({ ...file, path: cleanPath(file.path) }));
   const indexFile = cleaned.find((file) => file.path === INDEX_PATH);
@@ -146,12 +155,26 @@ export function fromFiles(files: FormatFile[]): Library {
     result.target_profiles = (index.target_profiles && typeof index.target_profiles === 'object' ? index.target_profiles : {}) as Library['target_profiles'];
     result.scenarios = (index.scenarios && typeof index.scenarios === 'object' ? index.scenarios : {}) as Library['scenarios'];
     result.fleets = (index.fleets && typeof index.fleets === 'object' ? index.fleets : {}) as Library['fleets'];
+    result.groups = (index.groups && typeof index.groups === 'object' ? index.groups : {}) as Library['groups'];
     for (const [key, value] of Object.entries(index)) {
-      if (!['format', 'folders', 'characters', 'damage_patterns', 'target_profiles', 'scenarios', 'fleets'].includes(key)) result[key] = value;
+      if (!['format', 'folders', 'characters', 'damage_patterns', 'target_profiles', 'scenarios', 'fleets', 'groups'].includes(key)) result[key] = value;
     }
   }
   for (const file of cleaned) {
-    if (file.path === INDEX_PATH || !file.path.endsWith('.exfa.json')) continue;
+    if (file.path === INDEX_PATH) continue;
+    if (file.path.startsWith(`${GROUP_DIR}/`) && file.path.endsWith('.json') && !file.path.endsWith('.exfa.json')) {
+      const raw = JSON.parse(file.text) as Record<string, unknown>;
+      if (raw?.format !== 'exfa/group@1') continue;
+      if (typeof raw.id !== 'string' || !raw.id) throw new FormatError('MISSING_GROUP_ID', `Group document in ${file.path} has no id`);
+      result.groups[raw.id] = {
+        ...raw,
+        name: typeof raw.name === 'string' ? raw.name : raw.id,
+        actors: Array.isArray(raw.actors) ? raw.actors : [],
+        relations: Array.isArray(raw.relations) ? raw.relations : [],
+      } as Library['groups'][string];
+      continue;
+    }
+    if (!file.path.endsWith('.exfa.json')) continue;
     const raw = JSON.parse(file.text);
     const document = migrateFitDocument(raw) as FitDocument;
     if (!document.id) throw new FormatError('MISSING_FIT_ID', `Fit document in ${file.path} has no id`);

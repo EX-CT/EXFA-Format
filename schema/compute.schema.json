@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EX-CT/EXFA-Format/schema/compute.schema.json",
+  "title": "EXFA Compute Request v1",
+  "description": "Envelope shared with the engine. `fit` holds a FitSpec (the engine FitRequest shape plus optional entry `id`s and `select` on projected fit entries); `batch` holds a BatchSpec (the engine BatchRequest).",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": ["format", "operation", "fit"],
+      "properties": {
+        "format": { "const": "exfa/compute@1" },
+        "operation": { "const": "calc" },
+        "fit": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    {
+      "type": "object",
+      "required": ["format", "operation", "batch"],
+      "properties": {
+        "format": { "const": "exfa/compute@1" },
+        "operation": { "const": "batch" },
+        "batch": { "type": "object" }
+      },
+      "additionalProperties": true
+    }
+  ]
+}

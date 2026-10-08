@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EX-CT/EXFA-Format/schema/workspace.schema.json",
+  "title": "EXFA Workspace v1",
+  "type": "object",
+  "required": ["format", "id", "name", "defaults", "library"],
+  "properties": {
+    "format": { "const": "exfa/workspace@1" },
+    "id": { "$ref": "common.schema.json#/$defs/opaqueId" },
+    "name": { "type": "string" },
+    "notes": { "type": "string" },
+    "defaults": { "type": "object", "additionalProperties": true },
+    "library": { "$ref": "library.schema.json" }
+  },
+  "additionalProperties": true
+}

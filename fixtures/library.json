@@ -230,5 +230,21 @@
       ]
     }
   },
+  "groups": {
+    "group-alpha": {
+      "format": "exfa/group@1",
+      "id": "group-alpha",
+      "name": "Escalation Group",
+      "actors": [
+        { "id": "logi", "fit_id": "command", "label": "Logistics", "role": "logistics" },
+        { "id": "dps-1", "fit_id": "app-basic" },
+        { "id": "dps-2", "fit_id": "app-nested-a" }
+      ],
+      "relations": [
+        { "id": "rel-projection", "kind": "project", "source": "logi", "targets": ["dps-1", "dps-2"], "amount": 1, "distance_m": 8000 },
+        { "id": "rel-command", "kind": "command", "source": "logi", "targets": ["dps-1"], "enabled": false }
+      ]
+    }
+  },
   "future_library_field": { "preserve": true }
 }

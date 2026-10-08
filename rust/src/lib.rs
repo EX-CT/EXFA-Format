@@ -1,7 +1,11 @@
+pub mod compute;
 pub mod files;
+pub mod group;
 pub mod migrate;
+pub mod package;
 pub mod resolve;
 pub mod types;
+mod util;
 
 use std::fmt::{Display, Formatter};
 
@@ -25,13 +29,17 @@ impl Display for FormatError {
 
 impl std::error::Error for FormatError {}
 
+pub use compute::compute_request;
 pub use files::{from_files, read_directory, to_files, write_directory, FormatFile};
+pub use group::{compile_group, new_group, CompiledGroup};
 pub use migrate::{migrate, migrate_fit_document};
+pub use package::{merge_package, package_fit, package_group, ConflictPolicy, MergePolicy};
 pub use resolve::{resolve, resolve_fit_document, resolve_with_options, scenario_request, ResolveOptions};
 pub use types::{
     Alternative, AlternativeOption, Branch, Character, DamagePattern, Environment, Fit,
     FitCargo, FitDocument, FitDrone, FitFighter, FitLinks, FitModule, FitOptions, FitRefs,
-    Fleet, FleetBuff, FleetMember, HistoryEntry, Library, ModState, Mutation, Override,
+    Fleet, FleetBuff, FleetMember, Group, GroupActor, GroupRelation, GroupRelationKind,
+    HistoryEntry, Library, ModState, Mutation, Override, Package, PackageRoot, PackageRootKind,
     Presence, ProjectedFitLink, ProjectedItem, Scenario, Security, Ship, Slot, SdeRef,
-    TargetProfile,
+    TargetProfile, Workspace,
 };

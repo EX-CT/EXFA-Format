@@ -105,6 +105,8 @@ pub struct Ship {
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FitModule {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     pub type_id: u64,
     pub slot: Option<Slot>,
     pub state: Option<ModState>,
@@ -124,6 +126,8 @@ pub struct FitModule {
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FitDrone {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     pub type_id: u64,
     pub quantity: u64,
     pub active: u64,
@@ -137,6 +141,8 @@ pub struct FitDrone {
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FitFighter {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     pub type_id: u64,
     pub quantity: u64,
     pub active: bool,
@@ -148,6 +154,8 @@ pub struct FitFighter {
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FitCargo {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     pub type_id: u64,
     pub quantity: u64,
     #[serde(default, skip_serializing_if = "Presence::is_missing")]
@@ -456,6 +464,120 @@ pub struct Fleet {
     pub extra: BTreeMap<String, Value>,
 }
 
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum GroupRelationKind {
+    Project,
+    Command,
+}
+
+impl Default for GroupRelationKind {
+    fn default() -> Self {
+        Self::Project
+    }
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct GroupActor {
+    pub id: String,
+    pub fit_id: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    #[serde(flatten)]
+    pub extra: BTreeMap<String, Value>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct GroupRelation {
+    pub id: String,
+    pub kind: GroupRelationKind,
+    /// Source actor id.
+    pub source: String,
+    /// Target actor ids.
+    #[serde(default)]
+    pub targets: Vec<String>,
+    /// Ids of modules/drones/fighters inside the source fit document.
+    #[serde(default)]
+    pub source_item_ids: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub amount: Option<f64>,
+    #[serde(default, skip_serializing_if = "Presence::is_missing")]
+    pub distance_m: Presence<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub notes: Option<String>,
+    #[serde(flatten)]
+    pub extra: BTreeMap<String, Value>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Group {
+    pub format: String,
+    pub id: String,
+    pub name: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub folder: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub notes: Option<String>,
+    #[serde(default)]
+    pub actors: Vec<GroupActor>,
+    #[serde(default)]
+    pub relations: Vec<GroupRelation>,
+    #[serde(flatten)]
+    pub extra: BTreeMap<String, Value>,
+}
+
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum PackageRootKind {
+    Fit,
+    Group,
+}
+
+impl Default for PackageRootKind {
+    fn default() -> Self {
+        Self::Fit
+    }
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct PackageRoot {
+    pub kind: PackageRootKind,
+    pub id: String,
+    #[serde(flatten)]
+    pub extra: BTreeMap<String, Value>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Package {
+    pub format: String,
+    #[serde(default)]
+    pub root: PackageRoot,
+    #[serde(default)]
+    pub library: Library,
+    #[serde(flatten)]
+    pub extra: BTreeMap<String, Value>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Workspace {
+    pub format: String,
+    pub id: String,
+    pub name: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub notes: Option<String>,
+    /// Host-defined default scope keys.
+    #[serde(default)]
+    pub defaults: BTreeMap<String, Value>,
+    #[serde(default)]
+    pub library: Library,
+    #[serde(flatten)]
+    pub extra: BTreeMap<String, Value>,
+}
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Library {
     pub format: String,
@@ -473,6 +595,8 @@ pub struct Library {
     pub scenarios: BTreeMap<String, Scenario>,
     #[serde(default)]
     pub fleets: BTreeMap<String, Fleet>,
+    #[serde(default)]
+    pub groups: BTreeMap<String, Group>,
     #[serde(flatten)]
     pub extra: BTreeMap<String, Value>,
 }

@@ -3,7 +3,7 @@
   "$id": "https://github.com/EX-CT/EXFA-Format/schema/library-index.schema.json",
   "title": "EXFA Library Index v1",
   "type": "object",
-  "required": ["format", "folders", "characters", "damage_patterns", "target_profiles", "scenarios", "fleets"],
+  "required": ["format", "folders", "characters", "damage_patterns", "target_profiles", "scenarios", "fleets", "groups"],
   "properties": {
     "format": { "const": "exfa/library-index@1" },
     "folders": { "type": "array", "items": { "type": "string" } },
@@ -11,7 +11,8 @@
     "damage_patterns": { "type": "object", "additionalProperties": { "$ref": "library.schema.json#/$defs/damagePattern" } },
     "target_profiles": { "type": "object", "additionalProperties": { "$ref": "library.schema.json#/$defs/targetProfile" } },
     "scenarios": { "type": "object", "additionalProperties": { "$ref": "scenario.schema.json" } },
-    "fleets": { "type": "object", "additionalProperties": { "$ref": "library.schema.json#/$defs/fleet" } }
+    "fleets": { "type": "object", "additionalProperties": { "$ref": "library.schema.json#/$defs/fleet" } },
+    "groups": { "type": "object", "additionalProperties": { "$ref": "group.schema.json" } }
   },
   "additionalProperties": true
 }

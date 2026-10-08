@@ -100,7 +100,7 @@ fn apply_option(item: &mut Value, option: &AlternativeOption, list: &str) {
     }
 }
 
-fn apply_branch(document: &FitDocument, branch_id: &str) -> Result<FitDocument, FormatError> {
+pub(crate) fn apply_branch(document: &FitDocument, branch_id: &str) -> Result<FitDocument, FormatError> {
     let branch = document.branches.iter().find(|branch| branch.id == branch_id).ok_or_else(|| {
         FormatError::new("BRANCH_NOT_FOUND", format!("Branch not found: {branch_id}"))
     })?;
@@ -135,24 +135,35 @@ fn resolve_fit(document: &FitDocument, library: &Library, depth: usize) -> Resul
         "alpha_clone": character.and_then(|value| value.alpha_clone).unwrap_or(false),
     });
     let modules = fit.modules.iter().map(|module| {
-        json!({
+        let mut output = json!({
             "type_id": module.type_id,
             "slot": module.slot,
             "state": module.state,
             "charge_type_id": module.charge_type_id,
             "mutation": module.mutation,
             "spool": module.spool.as_ref().map(|amount| json!({ "type": "spool_scale", "amount": amount })).unwrap_or(Value::Null),
-        })
+        });
+        if let Some(id) = &module.id {
+            output.as_object_mut().expect("object").insert("id".to_owned(), json!(id));
+        }
+        output
     }).collect::<Vec<_>>();
     let drones = fit.drones.iter().map(|drone| {
         let mut output = json!({ "type_id": drone.type_id, "quantity": drone.quantity, "active": drone.active });
+        if let Some(id) = &drone.id {
+            output.as_object_mut().expect("object").insert("id".to_owned(), json!(id));
+        }
         if let Presence::Value(mutation) = &drone.mutation {
             output.as_object_mut().expect("object").insert("mutation".to_owned(), json!(mutation));
         }
         output
     }).collect::<Vec<_>>();
     let fighters = fit.fighters.iter().map(|fighter| {
-        json!({ "type_id": fighter.type_id, "quantity": fighter.quantity, "active": fighter.active, "abilities": fighter.abilities })
+        let mut output = json!({ "type_id": fighter.type_id, "quantity": fighter.quantity, "active": fighter.active, "abilities": fighter.abilities });
+        if let Some(id) = &fighter.id {
+            output.as_object_mut().expect("object").insert("id".to_owned(), json!(id));
+        }
+        output
     }).collect::<Vec<_>>();
     let boosters = fit.boosters.iter().map(|booster| {
         json!({
@@ -236,7 +247,13 @@ fn resolve_fit(document: &FitDocument, library: &Library, depth: usize) -> Resul
         "fighters": fighters,
         "implants": fit.implants,
         "boosters": boosters,
-        "cargo": fit.cargo.iter().map(|cargo| json!({ "type_id": cargo.type_id, "quantity": cargo.quantity })).collect::<Vec<_>>(),
+        "cargo": fit.cargo.iter().map(|cargo| {
+            let mut output = json!({ "type_id": cargo.type_id, "quantity": cargo.quantity });
+            if let Some(id) = &cargo.id {
+                output.as_object_mut().expect("object").insert("id".to_owned(), json!(id));
+            }
+            output
+        }).collect::<Vec<_>>(),
         "fleet": { "buffs": fit.fleet_buffs, "booster_fits": booster_fits },
         "projected": projected,
         "environment": { "effect_type_ids": fit.environment.effect_type_ids, "system_security": security_name(&fit.environment.system_security) },

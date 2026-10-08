@@ -11,6 +11,7 @@ import {
   recordHistory,
   removeAlternative,
   resolve,
+  resolveFit,
   restoreHistory,
   toFiles,
   type FitDocument,
@@ -142,11 +143,43 @@ describe('migration, history, and files', () => {
     );
   });
 
-  it('validates library, FitDocument, and generated index fixtures with the JSON schemas', async () => {
+  it('round-trips groups via the index map and groups/<id>.json files', () => {
+    const files = toFiles(library);
+    const index = JSON.parse(files[0].text);
+    expect(index.groups['group-alpha']).toEqual(library.groups['group-alpha']);
+    const groupFile = files.find((file) => file.path === 'groups/group-alpha.json');
+    expect(groupFile).toBeDefined();
+    expect(JSON.parse(groupFile!.text)).toEqual(library.groups['group-alpha']);
+    const fromFileOnly = fromFiles([groupFile!]);
+    expect(fromFileOnly.groups['group-alpha']).toEqual(library.groups['group-alpha']);
+    expect(fromFileOnly.fits).toEqual({});
+    const validators = library.groups['group-alpha'];
+    expect(validators.format).toBe('exfa/group@1');
+  });
+
+  it('passes document item ids through to resolved requests', () => {
+    const document = structuredClone(library.fits['app-basic']);
+    document.fit.modules[0].id = 'mod-1';
+    document.fit.drones.push({ id: 'drone-1', type_id: 2488, quantity: 2, active: 2 });
+    document.fit.fighters.push({ id: 'ftr-1', type_id: 2305, quantity: 1, active: true });
+    document.fit.cargo.push({ id: 'cargo-1', type_id: 21898, quantity: 10 });
+    const request = resolveFit(document.fit, { library, document_id: document.id, refs: document.refs, links: document.links });
+    expect(request.modules[0].id).toBe('mod-1');
+    expect(request.drones[0].id).toBe('drone-1');
+    expect(request.fighters[0].id).toBe('ftr-1');
+    expect(request.cargo[0].id).toBe('cargo-1');
+    const plain = resolve(library, 'app-basic');
+    expect('id' in plain.modules[0]).toBe(false);
+  });
+
+  it('validates library, FitDocument, Group, and generated index fixtures with the JSON schemas', async () => {
     const validators = await loadFormatSchemas();
     expect(validators.validateLibrary?.(library), JSON.stringify(validators.validateLibrary?.errors)).toBe(true);
     for (const document of Object.values(library.fits)) {
       expect(validators.validateFitDocument?.(document), JSON.stringify(validators.validateFitDocument?.errors)).toBe(true);
+    }
+    for (const group of Object.values(library.groups)) {
+      expect(validators.validateGroup?.(group), JSON.stringify(validators.validateGroup?.errors)).toBe(true);
     }
     const index = JSON.parse(toFiles(library)[0].text);
     expect(validators.validateLibraryIndex?.(index), JSON.stringify(validators.validateLibraryIndex?.errors)).toBe(true);

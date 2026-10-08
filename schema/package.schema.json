@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EX-CT/EXFA-Format/schema/package.schema.json",
+  "title": "EXFA Package v1",
+  "type": "object",
+  "required": ["format", "root", "library"],
+  "properties": {
+    "format": { "const": "exfa/package@1" },
+    "root": { "type": "object", "required": ["kind", "id"], "properties": {
+      "kind": { "enum": ["fit", "group"] },
+      "id": { "$ref": "common.schema.json#/$defs/opaqueId" }
+    }, "additionalProperties": true },
+    "library": { "$ref": "library.schema.json" }
+  },
+  "additionalProperties": true
+}
