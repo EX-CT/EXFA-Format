@@ -95,16 +95,24 @@ export async function loadFormatSchemas() {
     readJson('schema/common.schema.json'),
     readJson('schema/scenario.schema.json'),
     readJson('schema/fit-document.schema.json'),
+    readJson('schema/group.schema.json'),
     readJson('schema/library.schema.json'),
     readJson('schema/library-index.schema.json'),
+    readJson('schema/package.schema.json'),
+    readJson('schema/workspace.schema.json'),
+    readJson('schema/compute.schema.json'),
   ]);
   const ajv = new Ajv2020({ allErrors: true, strict: false });
   addFormats(ajv);
   for (const schema of schemas) ajv.addSchema(schema);
   return {
     validateFitDocument: ajv.getSchema('https://github.com/EX-CT/EXFA-Format/schema/fit-document.schema.json'),
+    validateGroup: ajv.getSchema('https://github.com/EX-CT/EXFA-Format/schema/group.schema.json'),
     validateLibrary: ajv.getSchema('https://github.com/EX-CT/EXFA-Format/schema/library.schema.json'),
     validateLibraryIndex: ajv.getSchema('https://github.com/EX-CT/EXFA-Format/schema/library-index.schema.json'),
+    validatePackage: ajv.getSchema('https://github.com/EX-CT/EXFA-Format/schema/package.schema.json'),
+    validateWorkspace: ajv.getSchema('https://github.com/EX-CT/EXFA-Format/schema/workspace.schema.json'),
+    validateCompute: ajv.getSchema('https://github.com/EX-CT/EXFA-Format/schema/compute.schema.json'),
   };
 }
 

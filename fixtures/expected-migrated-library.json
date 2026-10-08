@@ -91,6 +91,7 @@
   "target_profiles": {},
   "scenarios": {},
   "fleets": {},
+  "groups": {},
   "ui": {
     "legacy": {
       "library": { "legacy_library_field": "preserve" },

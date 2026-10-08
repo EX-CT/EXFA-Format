@@ -1,5 +1,5 @@
 use crate::migrate::migrate_fit_document;
-use crate::types::{Character, DamagePattern, FitDocument, Fleet, Library, Scenario, TargetProfile};
+use crate::types::{Character, DamagePattern, FitDocument, Fleet, Group, Library, Scenario, TargetProfile};
 use crate::FormatError;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -8,6 +8,7 @@ use std::fs;
 use std::path::Path;
 
 const INDEX_PATH: &str = "library.exfa.json";
+const GROUP_DIR: &str = "groups";
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 struct LibraryIndex {
@@ -24,6 +25,8 @@ struct LibraryIndex {
     scenarios: BTreeMap<String, Scenario>,
     #[serde(default)]
     fleets: BTreeMap<String, Fleet>,
+    #[serde(default)]
+    groups: BTreeMap<String, Group>,
     #[serde(flatten)]
     extra: BTreeMap<String, Value>,
 }
@@ -39,6 +42,7 @@ impl From<&Library> for LibraryIndex {
             target_profiles: library.target_profiles.clone(),
             scenarios: library.scenarios.clone(),
             fleets: library.fleets.clone(),
+            groups: library.groups.clone(),
             extra: library.extra.clone(),
         }
     }
@@ -110,6 +114,11 @@ pub fn to_files(library: &Library) -> Result<Vec<FormatFile>, FormatError> {
         let path = format!("{}{name}.{}.exfa.json", if folder.is_empty() { String::new() } else { format!("{folder}/") }, safe_id(&document.id));
         files.push(FormatFile { path, text: pretty_json(&on_disk)? });
     }
+    let mut groups = library.groups.values().collect::<Vec<_>>();
+    groups.sort_by(|left, right| left.id.cmp(&right.id));
+    for group in groups {
+        files.push(FormatFile { path: format!("{GROUP_DIR}/{}.json", safe_id(&group.id)), text: pretty_json(group)? });
+    }
     Ok(files)
 }
 
@@ -142,10 +151,27 @@ pub fn from_files(files: &[FormatFile]) -> Result<Library, FormatError> {
         library.target_profiles = index.target_profiles;
         library.scenarios = index.scenarios;
         library.fleets = index.fleets;
+        library.groups = index.groups;
         library.extra = index.extra;
     }
     for (path, file) in normalized {
-        if path == INDEX_PATH || !path.ends_with(".exfa.json") {
+        if path == INDEX_PATH {
+            continue;
+        }
+        if path.starts_with(&format!("{GROUP_DIR}/")) && path.ends_with(".json") && !path.ends_with(".exfa.json") {
+            let value: Value = serde_json::from_str(&file.text)
+                .map_err(|error| FormatError::new("INVALID_GROUP", format!("{path}: {error}")))?;
+            if value.get("format").and_then(Value::as_str) == Some("exfa/group@1") {
+                let group: Group = serde_json::from_value(value)
+                    .map_err(|error| FormatError::new("INVALID_GROUP", format!("{path}: {error}")))?;
+                if group.id.is_empty() {
+                    return Err(FormatError::new("MISSING_GROUP_ID", format!("Group document in {path} has no id")));
+                }
+                library.groups.insert(group.id.clone(), group);
+            }
+            continue;
+        }
+        if !path.ends_with(".exfa.json") {
             continue;
         }
         let value: Value = serde_json::from_str(&file.text)
@@ -187,7 +213,8 @@ fn collect_directory_files(root: &Path, directory: &Path, files: &mut Vec<Format
         } else if kind.is_file() {
             let relative = path.strip_prefix(root).map_err(|error| FormatError::new("IO_ERROR", error.to_string()))?;
             let relative = relative.to_string_lossy().replace('\\', "/");
-            if relative == INDEX_PATH || relative.ends_with(".exfa.json") {
+            let is_group = relative.starts_with(&format!("{GROUP_DIR}/")) && relative.ends_with(".json");
+            if relative == INDEX_PATH || relative.ends_with(".exfa.json") || is_group {
                 let text = fs::read_to_string(path).map_err(|error| FormatError::new("IO_ERROR", error.to_string()))?;
                 files.push(FormatFile { path: relative, text });
             }

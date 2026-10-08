@@ -91,6 +91,7 @@ export function resolveFit(fit: Fit, context: ResolveContext): FitRequest {
       alpha_clone: character?.alpha_clone === true,
     },
     modules: fit.modules.map((module) => ({
+      ...(module.id !== undefined ? { id: module.id } : {}),
       type_id: module.type_id,
       slot: module.slot,
       state: module.state,
@@ -99,15 +100,17 @@ export function resolveFit(fit: Fit, context: ResolveContext): FitRequest {
       spool: module.spool != null ? { type: 'spool_scale', amount: module.spool } : null,
     })),
     drones: fit.drones.map((drone) => ({
+      ...(drone.id !== undefined ? { id: drone.id } : {}),
       type_id: drone.type_id, quantity: drone.quantity, active: drone.active,
       ...(drone.mutation != null ? { mutation: clone(drone.mutation) } : {}),
     })),
     fighters: fit.fighters.map((fighter) => ({
+      ...(fighter.id !== undefined ? { id: fighter.id } : {}),
       type_id: fighter.type_id, quantity: fighter.quantity, active: fighter.active, abilities: fighter.abilities ?? null,
     })),
     implants: clone(fit.implants),
     boosters: fit.boosters.map((booster) => ({ type_id: booster.type_id, side_effects: booster.side_effects ?? [] })),
-    cargo: fit.cargo.map(({ type_id, quantity }) => ({ type_id, quantity })),
+    cargo: fit.cargo.map(({ id, type_id, quantity }) => ({ ...(id !== undefined ? { id } : {}), type_id, quantity })),
     fleet: {
       buffs: clone(fit.fleet_buffs),
       booster_fits: depth > 0 ? [] : boosterFitIds(library, links, context.document_id)

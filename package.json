@@ -1,6 +1,6 @@
 {
   "name": "@exfa/format",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "EXFA fit library and document format",
   "type": "module",
   "license": "LGPL-3.0-or-later",

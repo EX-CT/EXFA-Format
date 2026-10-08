@@ -3,7 +3,7 @@
   "$id": "https://github.com/EX-CT/EXFA-Format/schema/library.schema.json",
   "title": "EXFA Library v1",
   "type": "object",
-  "required": ["format", "folders", "fits", "characters", "damage_patterns", "target_profiles", "scenarios", "fleets"],
+  "required": ["format", "folders", "fits", "characters", "damage_patterns", "target_profiles", "scenarios", "fleets", "groups"],
   "properties": {
     "format": { "const": "exfa/library@1" },
     "folders": { "type": "array", "items": { "type": "string" } },
@@ -12,7 +12,8 @@
     "damage_patterns": { "type": "object", "additionalProperties": { "$ref": "#/$defs/damagePattern" } },
     "target_profiles": { "type": "object", "additionalProperties": { "$ref": "#/$defs/targetProfile" } },
     "scenarios": { "type": "object", "additionalProperties": { "$ref": "scenario.schema.json" } },
-    "fleets": { "type": "object", "additionalProperties": { "$ref": "#/$defs/fleet" } }
+    "fleets": { "type": "object", "additionalProperties": { "$ref": "#/$defs/fleet" } },
+    "groups": { "type": "object", "additionalProperties": { "$ref": "group.schema.json" } }
   },
   "$defs": {
     "character": { "type": "object", "required": ["id", "name", "default_level", "levels"], "properties": {
