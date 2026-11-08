@@ -1,5 +1,5 @@
 use exfa_format::{
-    compile_group, compute_request, from_files, merge_package, migrate, package_fit, package_group,
+    compile_group, from_files, merge_package, migrate, package_fit, package_group,
     read_directory, resolve, resolve_with_options, to_files, write_directory,
     Group, Library, MergePolicy, Package, ResolveOptions,
 };
@@ -114,11 +114,6 @@ fn resolve_passes_item_ids_through() {
     assert_eq!(request["drones"][0]["id"], json!("drone-1"));
     assert_eq!(request["fighters"][0]["id"], json!("ftr-1"));
     assert_eq!(request["cargo"][0]["id"], json!("cargo-1"));
-    let document = library.fits.get("app-basic").expect("fixture fit should exist").clone();
-    let request = compute_request(&library, &document, ResolveOptions::default()).expect("compute request should build");
-    assert_eq!(request["format"], json!("exfa/compute@1"));
-    assert_eq!(request["operation"], json!("calc"));
-    assert_eq!(request["fit"]["modules"][0]["id"], json!("mod-1"));
 }
 
 #[test]
@@ -188,10 +183,8 @@ fn compile_group_projects_with_select_and_commands() {
     })).expect("group should deserialize");
     let compiled = compile_group(&library, &group, &ResolveOptions::default()).expect("group should compile");
     let request = &compiled.request;
-    assert_eq!(request["format"], json!("exfa/compute@1"));
-    assert_eq!(request["operation"], json!("batch"));
-    assert_eq!(request["batch"]["batch_version"], json!(1));
-    let fits = request["batch"]["fits"].as_array().expect("fits list");
+    assert_eq!(request["batch_version"], json!(1));
+    let fits = request["fits"].as_array().expect("fits list");
     assert_eq!(fits.iter().map(|entry| entry["id"].as_str().unwrap()).collect::<Vec<_>>(), ["logi", "a", "b"]);
     assert_eq!(fits[0]["label"], json!("Logi"));
     assert_eq!(fits[1]["label"], json!("Doc a"));

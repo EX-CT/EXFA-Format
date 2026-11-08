@@ -100,7 +100,6 @@ export async function loadFormatSchemas() {
     readJson('schema/library-index.schema.json'),
     readJson('schema/package.schema.json'),
     readJson('schema/workspace.schema.json'),
-    readJson('schema/compute.schema.json'),
   ]);
   const ajv = new Ajv2020({ allErrors: true, strict: false });
   addFormats(ajv);
@@ -112,7 +111,6 @@ export async function loadFormatSchemas() {
     validateLibraryIndex: ajv.getSchema('https://github.com/EX-CT/EXFA-Format/schema/library-index.schema.json'),
     validatePackage: ajv.getSchema('https://github.com/EX-CT/EXFA-Format/schema/package.schema.json'),
     validateWorkspace: ajv.getSchema('https://github.com/EX-CT/EXFA-Format/schema/workspace.schema.json'),
-    validateCompute: ajv.getSchema('https://github.com/EX-CT/EXFA-Format/schema/compute.schema.json'),
   };
 }
 

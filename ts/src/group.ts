@@ -1,5 +1,4 @@
 import { applyBranch } from './branches.js';
-import type { ComputeBatchRequest } from './compute.js';
 import { resolveFit } from './resolve.js';
 import type { FitDocument, FitRequest, FitRequestProjected, Group, Library, ProjectedFitSelect, ResolveOptions } from './types.js';
 
@@ -11,13 +10,19 @@ export function newGroup(name?: string, id?: string): Group {
   return { format: 'exfa/group@1', id: id ?? uid(), name: name ?? 'New group', actors: [], relations: [] };
 }
 
+/** An engine BatchRequest (`fits` form): one resolved FitRequest per group actor. */
+export interface GroupBatchRequest {
+  batch_version: 1;
+  fits: { id: string; label: string; fit: FitRequest }[];
+}
+
 export interface CompiledGroup {
-  request: ComputeBatchRequest;
+  request: GroupBatchRequest;
   issues: string[];
 }
 
 /**
- * Lowers a group into one `exfa/compute@1` batch request: every actor resolves to a `batch.fits[]` entry,
+ * Lowers a group into one engine BatchRequest: every actor resolves to a `fits[]` entry,
  * `project` relations push `{kind:'fit'}` entries (with a strict-whitelist `select` when the relation names
  * `source_item_ids`) onto the target's `projected[]`, and `command` relations push the source request onto the
  * target's `fleet.booster_fits[]`. Problems are reported as issues, not thrown.
@@ -87,7 +92,7 @@ export function compileGroup(library: Library, group: Group, options: ResolveOpt
     return entry ? [{ id: actor.id, label: actor.label ?? entry.doc.name, fit: entry.request }] : [];
   });
   return {
-    request: { format: 'exfa/compute@1', operation: 'batch', batch: { batch_version: 1, fits } },
+    request: { batch_version: 1, fits },
     issues,
   };
 }

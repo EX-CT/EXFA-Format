@@ -1,4 +1,3 @@
-pub mod compute;
 pub mod files;
 pub mod group;
 pub mod migrate;
@@ -29,7 +28,6 @@ impl Display for FormatError {
 
 impl std::error::Error for FormatError {}
 
-pub use compute::compute_request;
 pub use files::{from_files, read_directory, to_files, write_directory, FormatFile};
 pub use group::{compile_group, new_group, CompiledGroup};
 pub use migrate::{migrate, migrate_fit_document};

@@ -1,6 +1,5 @@
 export * from './types.js';
 export * from './branches.js';
-export * from './compute.js';
 export * from './files.js';
 export * from './group.js';
 export * from './history.js';

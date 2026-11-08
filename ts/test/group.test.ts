@@ -8,7 +8,7 @@ import {
   type Group,
   type Library,
 } from '../src';
-import { loadFormatSchemas } from '../scripts/engine-schema.mjs';
+import { loadEngineValidators } from '../scripts/engine-schema.mjs';
 
 const makeDoc = (id: string, name: string, fit?: Partial<Fit>): FitDocument => ({
   format: 'exfa/fit@1',
@@ -59,8 +59,7 @@ const makeLibrary = (): Library => ({
   groups: {},
 });
 
-const fitsOf = (request: { batch: Record<string, unknown> }) =>
-  request.batch.fits as { id: string; label: string; fit: FitRequest }[];
+const fitsOf = (request: { fits: { id: string; label: string; fit: FitRequest }[] }) => request.fits;
 
 describe('newGroup', () => {
   it('creates an empty exfa/group@1 document with a generated id', () => {
@@ -85,16 +84,17 @@ describe('compileGroup', () => {
     };
     const { request, issues } = compileGroup(library, group);
     expect(issues).toEqual([]);
-    expect(request).toMatchObject({ format: 'exfa/compute@1', operation: 'batch' });
-    expect(request.batch.batch_version).toBe(1);
+    expect(request.batch_version).toBe(1);
     const fits = fitsOf(request);
     expect(fits.map((entry) => entry.id)).toEqual(['logi', 'dps']);
     expect(fits[0].label).toBe('Logi');
     expect(fits[1].label).toBe('DPS A');
     expect(fits[0].fit.modules.map((module) => module.id)).toEqual(['rep-1', 'rep-2']);
 
-    const validators = await loadFormatSchemas();
-    expect(validators.validateCompute?.(request), JSON.stringify(validators.validateCompute?.errors)).toBe(true);
+    const { validateAppCompatible } = await loadEngineValidators();
+    for (const entry of fits) {
+      expect(validateAppCompatible(entry.fit), JSON.stringify(validateAppCompatible.errors)).toBe(true);
+    }
   });
 
   it('projects the full source fit with a classified select whitelist', () => {

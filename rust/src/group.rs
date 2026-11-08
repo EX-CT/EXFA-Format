@@ -21,7 +21,7 @@ pub struct CompiledGroup {
     pub issues: Vec<String>,
 }
 
-/// Lowers a group into one `exfa/compute@1` batch request: every actor resolves to a `batch.fits[]` entry,
+/// Lowers a group into one engine BatchRequest: every actor resolves to a `batch.fits[]` entry,
 /// `project` relations push `{kind:"fit"}` entries (with a strict-whitelist `select` when the relation names
 /// `source_item_ids`) onto the target's `projected[]`, and `command` relations push the source request onto the
 /// target's `fleet.booster_fits[]`. Problems are reported as issues, not returned as errors.
@@ -111,11 +111,7 @@ pub fn compile_group(library: &Library, group: &Group, options: &ResolveOptions)
         })
     }).collect::<Vec<_>>();
     Ok(CompiledGroup {
-        request: json!({
-            "format": "exfa/compute@1",
-            "operation": "batch",
-            "batch": { "batch_version": 1, "fits": fits },
-        }),
+        request: json!({ "batch_version": 1, "fits": fits }),
         issues,
     })
 }
